@@ -26,8 +26,6 @@ object Plugin : KotlinPlugin(
     }
 ) {
     private var keylol: Job? = null
-    private var gamekags: Job? = null
-
     fun checkConfig(): Boolean {
         var flag = true
 /*
@@ -63,42 +61,16 @@ object Plugin : KotlinPlugin(
 //        GamekagsConfig.reload()
 
         if (!checkConfig()) return
-/*
-        this.globalEventChannel().subscribeAlways<GroupMessageEvent> {
-            if (AntikusoConfig.qqGroup == group.id
-                && AntikusoConfig.reg.toRegex().containsMatchIn(message.content)) {
-                val text = AntikusoConfig.prefix + sender.nameCard
-                val os = ByteArrayOutputStream()
-                var stream: InputStream? = null
-                try {
-                    ImageIO.write(ImgMarker.mark(text), "png", os)
-                    stream = ByteArrayInputStream(os.toByteArray())
-                    val img = subject.uploadImage(stream)
-                    subject.sendMessage(message.quote() + img)
-                } catch (e: Exception) {
-                    logger.error("Antikuso error" + e.message)
-                } finally {
-                    os.close()
-                    stream?.close()
-                }
-            }
-        }
-*/
+
         keylol = launch {
             KeylolChecker.check()
         }
-/*
-        gamekags = launch {
-            GamekagsChecker.check()
-        }
- */
         logger.info { "Plugin loaded" }
     }
 
     override fun onDisable() {
         super.onDisable()
         keylol?.cancel()
-        gamekags?.cancel()
         logger.info { "Plugin unloaded" }
     }
 }
